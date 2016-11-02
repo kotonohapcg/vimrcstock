@@ -1,0 +1,2 @@
+# vimrcstock
+Vimに関すること
