@@ -5,6 +5,10 @@ let fortran_free_source=1
 
 "change character code
 set fenc=utf-8
+
+"setting BOM::no awttach bomb
+set nobomb
+
 "not create backup file
 set nobackup
 "not create swap file
