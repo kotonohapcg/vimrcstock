@@ -3,6 +3,10 @@ set nocompatible
 set cursorline
 set cursorcolumn
 
+set incsearch
+set ttyfast
+set showtabline=2
+
 set fenc=utf-8
 set nobomb
 set nobackup
@@ -76,7 +80,7 @@ endif
 
 " Required:
 filetype plugin indent on
-syntax enable
+syntax on
 
 " If you want to install not installed plugins on startup.
 if dein#check_install()
