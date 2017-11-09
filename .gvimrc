@@ -19,10 +19,6 @@ set hidden
 
 set backspace=indent,eol,start
 
-"setting indent
-set autoindent
-set smartindent
-set breakindent
 
 "status line ever indicate
 set laststatus=2
@@ -30,6 +26,11 @@ set autowrite
 
 "setting copy & paste
 set clipboard=unnamed,autoselect
+
+"setting indent
+set autoindent
+set smartindent
+set breakindent
 
 "tab & other settings
 set shiftwidth=4
@@ -76,6 +77,7 @@ if dein#load_state('/home/kotonoha/.cache/dein')
 	call dein#add('tyru/open-browser.vim')
 	call dein#add('mattn/emmet-vim')
 	call dein#add('LeafCage/yankround.vim')
+	call dein#add('mattn/vim-mastodon')
 
   " Required:
   call dein#end()
@@ -100,5 +102,9 @@ autocmd vimenter * if !argc() | NERDTree | endif
 autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
 
 nnoremap <silent><C-e> :NERDTreeToggle<CR>
+
+let NERDTreeTogglesShowHidden = 1
+
+autocmd VimEnter* execute 'NERDTree'
 
 
