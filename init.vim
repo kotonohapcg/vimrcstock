@@ -1,5 +1,15 @@
 filetype plugin indent off
 
+" ※※※※※※※※※※
+" ※Default   config※
+" ※※※※※※※※※※
+
+cd ~\
+set wildmenu
+set wildmode=full
+set wildoption=pum
+set pumblend=10
+
 set nocompatible
 set cursorline
 set cursorcolumn
@@ -50,27 +60,29 @@ set showtabline=2
 set noshowmode
 
 " GUI font configuration
-set guifont=BIZ\ UDゴシック:h14
+" Windowsの標準フォントで使用する場合
+" set guifont=BIZ\ UDゴシック:h14
+" ファイルマネージャをfernで使用する場合に、nerdfont対応の白源を使用する場合
+set guifont=HackGen\ Console\ NFJ:h14
 
-" tabby setup
-" require("tabby").setup({
-"     tabline = require("tabby.presets").tab_with_top_win,
-" })
+" コマンド一発でGUIの文字のサイズを変更できるようにする　BIG= 20, Mid= 18, Small= 14
+" ※※動作不安定につき、たびたびの利用はお勧めしない※※
+cmap Big set guifont=HackGen\ Console\ NFJ:h20:cutf-8 guifontwide=HackGen\ Console\ NFJ:h20
+cmap Mid set guifont=HackGen\ Console\ NFJ:h18:cutf-8 guifontwide=HackGen\ Console\ NFJ:h18
+cmap Small set guifont=HackGen\ Console\ NFJ:h14:cutf-8 guifontwide=HackGen\ Console\ NFJ:h14
+
 
 " Markdown code-block syntax highlighting
 let g:markdown_fenced_languages = [ 'cpp', 'html', 'json', 'javascript', 'lua', 'php']
 " ``の間をハイライトする
 autocmd Colorscheme * highlight link markdownCode Constant
 
-
+" keymap config without plugin keymap
 " leader key mapping
+" 設定したキーは<Leader>で使用する
 let mapleader = '\'
 
 
-" YankRing.vim config
-:let g:yankring_max_history = 30
-:let g:yankring_max_display = 70
-:let g:yankring_ignore_duplicate = 0
 
 
 " ※※※※※※※※※※
@@ -92,7 +104,7 @@ let mapleader = '\'
 "  let g:spzenhan#default_status = 0
 
 
-" ime off
+" ime off(spzenhanを使用する場合※要Plug Install)
 if executable('spzenhan')
 	let s:lastimestate = 0
 	autocmd InsertLeave * :call system('spzenhan 0')
@@ -103,23 +115,9 @@ if executable('spzenhan')
 	" autocmd InsertEnter * :call system('spzenhan ' + s:lastimestate)
 endif
 
-
 " ※※※※※※※※※※
-" ※Plugin configuration※
+" ※※※タブ設定※※※
 " ※※※※※※※※※※
-
-"NERDTree settings
-" 最初のタブはユーザの$HOMEを表示させる
-autocmd vimenter * if !argc() | NERDTree C:\Users\k_sat | endif
-" 次に:tabnewした場合は、デフォルトの位置を$HOMEに移動させる
-" autocmd TabNew * if !argc() | NERDTree ~/ | endif
-" 最後のタブ担った場合の挙動(あんまり覚えていない)
-autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
-
-" nnoremap <silent><C-e> :NERDTreeToggle C:\Users\k_sat<CR>
-nnoremap <silent><C-e> :NERDTreeToggle<CR>
-
-" タブ設定
 
 " ブラウザと同じような操作方法でタブ切り替えをする
 " もしもこれが動かない場合は、<C-j/k>によるタブ切り替えを行う。その場合はバッファ切り替えのコマンドを別のバインドに変更すること。
@@ -130,14 +128,56 @@ nmap <C-S-Tab> :tabprevious<CR>
 " nmap <C-k> :tabprevious<CR>
 
 " バッファ送り/戻しをする
-nmap <C-j> :bn<CR>
-nmap <C-k> :bp<CR>
+nmap <C-j> :bnext<CR>
+nmap <C-k> :bprev<CR>
 
 " 新しいタブを開く/現在のタブを閉じる
+" C-S-tについては、環境によって動作する場合とそうでない場合とがある模様
 nmap <C-t> :tabnew<CR>
 nmap <C-S-t> :tabc<CR>
 
-let NERDTreeShowHidden = 1
+
+
+" ※※※※※※※※※※
+" ※Plugin configuration※
+" ※※※※※※※※※※
+
+"NERDTree settings
+" 最初のタブはユーザの$HOMEを表示させる
+" autocmd vimenter * if !argc() | NERDTree C:\Users\k_sat | endif
+" " 次に:tabnewした場合は、デフォルトの位置を$HOMEに移動させる
+" " autocmd TabNew * if !argc() | NERDTree ~/ | endif
+" " 最後のタブになった場合の挙動(あんまり覚えていない)
+" autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
+" " nnoremap <silent><C-e> :NERDTreeToggle C:\Users\k_sat<CR>
+" nnoremap <silent><C-e> :NERDTreeToggle<CR>
+" let NERDTreeShowHidden = 1
+
+" Fern.vim configuration
+" 隠しファイルを表示する
+let g:fern#default_hidden=1
+" Fern . を<Leader>+eに置き換え
+" nmap <Silent> <Leader>e : <C-u>Fern .<CR>
+
+" 最初のタブはユーザの$HOMEを表示させる
+" autocmd vimenter * if !argc() | Fern C:\Users\k_sat -drawer -toggle | endif
+
+" <C-e>でドロワー表示の切り替え
+ nmap <C-e> :Fern . -reveal=% -drawer -toggle -width=40<CR>
+" nmap <C-e> :Fern . -reveal=% -toggle<CR>
+
+
+" フォント/アイコンの設定
+" ※要nerdfont
+let g:fern#renderer = 'nerdfont'
+
+
+
+
+
+" Buffergator config
+nmap <Leader><C-b> : BuffergatorToggle<CR>
+
 
 "lightline-vim settings
 let g:lightline = {
@@ -150,16 +190,45 @@ let g:netrw_nogx = 1 " disable netrw's gx mapping.
 nmap gx <Plug>(openbrowser-smart-search)
 vmap gx <Plug>(openbrowser-smart-search)
 
+" YankRing.vim config
+:let g:yankring_max_history = 30
+:let g:yankring_max_display = 70
+:let g:yankring_ignore_duplicate = 0
+
+" coc.nvim config
+set statusline^=%{coc#status()}%{get(b:,'coc_current_function','')}
+nmap <C-f> :CocList<CR>
+
+
+
+"auto-pairs config
+" <>を自動入力されるようにしたかったけど、ほかと同じ書式ではうまくいかないらしい。実装の問題か？
+let g:AutoPairs = {'(':')', '[':']', '{':'}',"'":"'",'"':'"', '`':'`', '<':'>', '<?':'?>'}
+
+
+" '<!--','-->'なんかを自動で入力されるようにしたい　※未検証、おそらく動作はしない
+au FileType html	let b:AutoPairs = AutoPairsDefine({'<!--':'-->'})
+au FileType php		let b:AutoPairs = AutoPairsDefine({'<?' : '?>', '<?php' : '?>'})
+
+
 " vim-plug package manager config
 
-call plug#begin('~/AppData/Local/nvim/plugged')
+call plug#begin('~/.config/nvim/plugged')
 
 	Plug 'neoclide/coc.nvim', {'branch': 'release'}
-
+	
+	" filler plugin
+	Plug 'lambdalisue/fern.vim'
 	Plug 'preservim/nerdtree'
+	" statusline plugin
  	Plug 'itchyny/lightline.vim'
+
 	Plug 'tyru/open-browser.vim'
+
+	" IME plugin
 	Plug 'kaz399/spzenhan.vim'
+
+	" color scheme
 	Plug 'tomasr/molokai'
 	" Plug 'iamcco/markdown-preview.nvim'
 	" fzf 
@@ -174,7 +243,18 @@ call plug#begin('~/AppData/Local/nvim/plugged')
 	" OSのクリップボードとヤンク履歴を連動させて、<Super>+Vと同じ動作をさせる
 	Plug 'vim-scripts/YankRing.vim'
 	" notetaking plugin
-	Plug 'fmoralesc/vim-pad'
+	" Plug 'fmoralesc/vim-pad'
+	" buffer finder
+	Plug 'jeetsukumaran/vim-buffergator'
+
+	" auto pair insert
+	Plug 'jiangmiao/auto-pairs',
+
+	" Nerd Font
+	Plug 'lambdalisue/fern-renderer-nerdfont.vim'
+	Plug 'lambdalisue/nerdfont.vim'
+	" インデントのタブをRAINBOWにする
+	Plug 'adi/vim-indent-rainbow'
 
 call plug#end()
 
